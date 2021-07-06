@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/ksarsecha/movie_rental/handler"
+	http2 "github.com/ksarsecha/movie_rental/http"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -17,7 +19,7 @@ func TestHandler(t *testing.T) {
 	}
 
 	recorder := httptest.NewRecorder()
-	handlerFunc := http.HandlerFunc(helloWorld)
+	handlerFunc := http.HandlerFunc(handler.HelloWorld)
 	handlerFunc.ServeHTTP(recorder, request)
 
 	if status := recorder.Code; status != http.StatusOK {
@@ -40,7 +42,7 @@ func TestHandler(t *testing.T) {
 }
 
 func TestRouter(t *testing.T) {
-	mockServer := httptest.NewServer(router())
+	mockServer := httptest.NewServer(http2.Router())
 	response, err := http.Get(mockServer.URL + "/hello")
 
 	if err != nil {
@@ -73,7 +75,7 @@ func TestRouter(t *testing.T) {
 }
 
 func TestShouldReturnNotFoundForInvalidRoute(t *testing.T) {
-	mockServer := httptest.NewServer(router())
+	mockServer := httptest.NewServer(http2.Router())
 	response, err := http.Get(mockServer.URL + "/invalid-route")
 
 	if err != nil {
@@ -86,7 +88,7 @@ func TestShouldReturnNotFoundForInvalidRoute(t *testing.T) {
 }
 
 func TestShouldReturnMethodNotAllowedForInvalidMethod(t *testing.T) {
-	mockServer := httptest.NewServer(router())
+	mockServer := httptest.NewServer(http2.Router())
 
 	response, err := http.Post(mockServer.URL+"/hello", "application/json", nil)
 
@@ -100,7 +102,7 @@ func TestShouldReturnMethodNotAllowedForInvalidMethod(t *testing.T) {
 }
 
 func TestStaticFileHandler(t *testing.T) {
-	mockServer := httptest.NewServer(router())
+	mockServer := httptest.NewServer(http2.Router())
 
 	response, err := http.Get(mockServer.URL + "/assets/")
 

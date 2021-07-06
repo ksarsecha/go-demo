@@ -1,27 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/gorilla/mux"
+	"github.com/ksarsecha/movie_rental/config"
+	http2 "github.com/ksarsecha/movie_rental/http"
+	server2 "github.com/ksarsecha/movie_rental/server"
+	"go.uber.org/zap"
 )
 
+var sugaredLogger = zap.NewExample()
+
 func main() {
-	http.ListenAndServe(":8080", router())
-}
+	httpServerConfig := config.InitConfig()
 
-func helloWorld(writer http.ResponseWriter, request *http.Request) {
-	fmt.Fprintf(writer, "Welcome to Go!")
-}
-
-func router() *mux.Router{
-	router := mux.NewRouter()
-	router.HandleFunc("/hello", helloWorld).Methods("GET")
-
-	assetsDir := http.Dir("./assets/")
-	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(assetsDir))
-
-	router.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
-	return router
+	server := server2.NewServer(httpServerConfig, sugaredLogger, http2.Router(), nil)
+	server.Start()
 }
