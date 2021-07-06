@@ -88,7 +88,7 @@ func TestShouldReturnNotFoundForInvalidRoute(t *testing.T) {
 func TestShouldReturnMethodNotAllowedForInvalidMethod(t *testing.T) {
 	mockServer := httptest.NewServer(router())
 
-	response, err := http.Post(mockServer.URL + "/hello", "application/json", nil)
+	response, err := http.Post(mockServer.URL+"/hello", "application/json", nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -96,5 +96,26 @@ func TestShouldReturnMethodNotAllowedForInvalidMethod(t *testing.T) {
 
 	if response.StatusCode != http.StatusMethodNotAllowed {
 		t.Errorf("Expected 405 method not allowed, received %d", response.StatusCode)
+	}
+}
+
+func TestStaticFileHandler(t *testing.T) {
+	mockServer := httptest.NewServer(router())
+
+	response, err := http.Get(mockServer.URL + "/assets/")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		t.Errorf("Expected 200 ok, received %d", response.StatusCode)
+	}
+
+	actualContentType := response.Header.Get("Content-Type")
+	expectedContentType := "text/html; charset=utf-8"
+
+	if actualContentType != expectedContentType {
+		t.Errorf("Expected %s, Received %s", expectedContentType, actualContentType)
 	}
 }
