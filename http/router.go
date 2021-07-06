@@ -9,10 +9,10 @@ import (
 func Router() *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc("/hello", handler.HelloWorld).Methods("GET")
+	router.HandleFunc("/movie", handler.CreateMovieHandler).Methods("POST")
 
 	assetsDir := http.Dir("./assets/")
 	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(assetsDir))
-
 	router.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
 
 	return router

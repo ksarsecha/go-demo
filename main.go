@@ -7,11 +7,10 @@ import (
 	"go.uber.org/zap"
 )
 
-var sugaredLogger = zap.NewExample()
-
 func main() {
-	httpServerConfig := config.InitConfig()
+	var logger = zap.NewExample()
 
-	server := server2.NewServer(httpServerConfig, sugaredLogger, http2.Router(), nil)
+	httpServerConfig := config.InitConfig()
+	server := server2.NewServer(httpServerConfig, logger, http2.Router(), nil)
 	server.Start()
 }
