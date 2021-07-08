@@ -10,6 +10,7 @@ func Router() *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc("/hello", handler.HelloWorld).Methods("GET")
 	router.HandleFunc("/movie", handler.CreateMovieHandler).Methods("POST")
+	router.HandleFunc("/movie/{name}", handler.GetMovieHandler).Methods("GET")
 
 	assetsDir := http.Dir("./assets/")
 	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(assetsDir))

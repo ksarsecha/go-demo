@@ -17,6 +17,7 @@ func TestRouter(t *testing.T) {
 
 	testRouter(t, rf(http.MethodGet, "/hello"))
 	testRouter(t, rf(http.MethodPost, "/movie"))
+	testRouter(t, rf(http.MethodGet, "/movie/TestName"))
 	testRouter(t, rf(http.MethodGet, "/assets/index.html"))
 }
 
